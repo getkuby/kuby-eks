@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'kube-dsl', '~> 0.1'
   s.add_dependency 'aws-sdk-eks', '~> 1.38'
+  s.add_dependency 'aws-iam-authenticator-rb', '~> 0.1'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'LICENSE', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby-eks.gemspec']
