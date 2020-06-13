@@ -4,7 +4,7 @@ Amazon EKS provider for [Kuby](https://github.com/getkuby/kuby-core).
 
 ## Intro
 
-In Kuby parlance, a "provider" is an [adapter](https://en.wikipedia.org/wiki/Adapter_pattern) that enables Kuby to deploy apps to a specific cloud provider. In this case, we're talking about Amazon's Elastic Kubernetes Service, or EKS.
+In Kuby parlance, a "provider" is an [adapter](https://en.wikipedia.org/wiki/Adapter_pattern) that enables Kuby to deploy apps to a specific cloud provider. In this case, we're talking about Amazon's [Elastic Kubernetes Service](https://aws.amazon.com/eks/), or EKS.
 
 All providers adhere to a specific interface, meaning you can swap out one provider for another without having to change your code.
 
