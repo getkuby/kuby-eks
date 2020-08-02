@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'aws-sdk-eks'
 require 'aws-iam-authenticator-rb'
+require 'tmpdir'
 require 'yaml'
 
 module Kuby
@@ -15,13 +16,9 @@ module Kuby
       end
 
       def kubeconfig_path
-        @kubeconfig_path ||= kubeconfig_dir.join(
-          "#{definition.app_name.downcase}-kubeconfig.yaml"
-        ).to_s
-      end
-
-      def after_configuration
-        refresh_kubeconfig
+        @kubeconfig_path ||= File.join(
+          kubeconfig_dir, "#{definition.app_name.downcase}-kubeconfig.yaml"
+        )
       end
 
       def storage_class_name
@@ -32,6 +29,10 @@ module Kuby
 
       def after_initialize
         @config = Config.new
+
+        kubernetes_cli.before_execute do
+          refresh_kubeconfig
+        end
       end
 
       # Double .credentials call here to convert instance into
@@ -115,8 +116,8 @@ module Kuby
       end
 
       def kubeconfig_dir
-        @kubeconfig_dir ||= definition.app.root.join(
-          'tmp', 'kuby-eks'
+        @kubeconfig_dir ||= File.join(
+          Dir.tmpdir, 'kuby-eks'
         )
       end
     end
