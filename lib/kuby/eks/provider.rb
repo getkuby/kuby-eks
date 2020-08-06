@@ -25,6 +25,14 @@ module Kuby
         STORAGE_CLASS_NAME
       end
 
+      def before_setup
+        refresh_kubeconfig
+      end
+
+      def before_deploy(*)
+        refresh_kubeconfig
+      end
+
       private
 
       def after_initialize
