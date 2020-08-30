@@ -17,7 +17,7 @@ module Kuby
 
       def kubeconfig_path
         @kubeconfig_path ||= File.join(
-          kubeconfig_dir, "#{definition.app_name.downcase}-kubeconfig.yaml"
+          kubeconfig_dir, "#{environment.app_name.downcase}-kubeconfig.yaml"
         )
       end
 
