@@ -3,6 +3,7 @@ require 'aws-sdk-eks'
 require 'aws-iam-authenticator-rb'
 require 'tmpdir'
 require 'yaml'
+require 'digest'
 
 module Kuby
   module EKS
@@ -16,8 +17,14 @@ module Kuby
       end
 
       def kubeconfig_path
-        @kubeconfig_path ||= File.join(
-          kubeconfig_dir, "#{environment.app_name.downcase}-kubeconfig.yaml"
+        File.join(
+          kubeconfig_dir,
+          "#{environment.app_name.downcase}" \
+          "-#{generate_hash(config.region,
+                            config.cluster_name,
+                            config.credentials.secret_access_key,
+                            config.credentials.access_key_id)}" \
+          '-kubeconfig.yaml'
         )
       end
 
@@ -127,6 +134,11 @@ module Kuby
         @kubeconfig_dir ||= File.join(
           Dir.tmpdir, 'kuby-eks'
         )
+      end
+
+      def generate_hash(*args)
+        to_encode = args.join('_')
+        Digest::SHA1.hexdigest(to_encode)
       end
     end
   end
