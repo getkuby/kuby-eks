@@ -19,12 +19,7 @@ module Kuby
       def kubeconfig_path
         File.join(
           kubeconfig_dir,
-          "#{environment.app_name.downcase}" \
-          "-#{generate_hash(config.region,
-                            config.cluster_name,
-                            config.credentials.secret_access_key,
-                            config.credentials.access_key_id)}" \
-          '-kubeconfig.yaml'
+          "#{environment.app_name.downcase}-#{config.hash_value}-kubeconfig.yaml"
         )
       end
 
@@ -40,14 +35,18 @@ module Kuby
         refresh_kubeconfig
       end
 
+      def kubernetes_cli
+        @kubernetes_cli ||= ::KubernetesCLI.new(kubeconfig_path).tap do |cli|
+          cli.before_execute do
+            refresh_kubeconfig
+          end
+        end
+      end
+
       private
 
       def after_initialize
         @config = Config.new
-
-        kubernetes_cli.before_execute do
-          refresh_kubeconfig
-        end
       end
 
       # Double .credentials call here to convert instance into
@@ -134,11 +133,6 @@ module Kuby
         @kubeconfig_dir ||= File.join(
           Dir.tmpdir, 'kuby-eks'
         )
-      end
-
-      def generate_hash(*args)
-        to_encode = args.join('_')
-        Digest::SHA1.hexdigest(to_encode)
       end
     end
   end
