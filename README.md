@@ -15,21 +15,23 @@ Enable the EKS provider like so:
 ```ruby
 require 'aws-sdk-eks'
 
-Kuby.define(:production) do
-  kubernetes do
+Kuby.define('MyApp') do
+  environment(:production) do
+    kubernetes do
 
-    provider :eks do
-      region 'us-west-2'
-      cluster_name 'my-cluster'
+      provider :eks do
+        region 'us-west-2'
+        cluster_name 'my-cluster'
 
-      credentials(
-        Aws::Credentials.new(
-          'my-access-key-id',
-          'my-secret-access-key'
+        credentials(
+          Aws::Credentials.new(
+            'my-access-key-id',
+            'my-secret-access-key'
+          )
         )
-      )
-    end
+      end
 
+    end
   end
 end
 ```
